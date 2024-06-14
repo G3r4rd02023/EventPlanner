@@ -1,0 +1,54 @@
+﻿@{
+    ViewData["Title"] = "Calendar";
+}
+
+<h2>Calendario</h2>
+
+<div id="calendar"></div>
+
+@section scripts {
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            var calendarEl = document.getElementById('calendar');
+            var calendar = new FullCalendar.Calendar(calendarEl, {
+                // Configuración y opciones de FullCalendar
+                // Puedes personalizar el calendario según tus necesidades
+                // Configuración básica
+                initialView: 'dayGridMonth', // Vista inicial (mes)
+                locale: 'es', // Idioma (español)
+                timeZone: 'local', // Zona horaria local
+
+                // Personalización de encabezado
+                headerToolbar: {
+                    left: 'prev,next today', // Botones en la parte izquierda
+                    center: 'title', // Título en el centro
+                    right: 'dayGridMonth,timeGridWeek,timeGridDay,listMonth' // Botones en la parte derecha                    
+                },
+                events: @Html.Raw(ViewBag.Eventos),
+                // Opciones de visualización de eventos
+                eventContent: function (info) {
+                    // Crear un contenedor de evento
+                    var title = document.createElement('div');
+                    title.classList.add('fc-event-title');
+                    title.innerText = info.event.title;
+
+                    // Crear un contenedor de detalles
+                    var container = document.createElement('div');
+                    container.classList.add('fc-event-container');
+                    container.appendChild(title);
+
+                    return { domNodes: [container] };
+                },
+                // Cargar los eventos desde ViewBag.Eventos
+                eventColor: '#378006', // Color de fondo de los eventos
+                eventTextColor: '#ffffff', // Color de texto de los eventos
+                // Opciones de interacción
+                editable: true, // Permitir la edición de eventos (arrastrar y soltar)
+                selectable: true, // Permitir selección de celdas
+                selectHelper: true, // Mostrar una sombra mientras se selecciona
+                    });
+            calendar.render();
+        });
+    </script>
+}
+
